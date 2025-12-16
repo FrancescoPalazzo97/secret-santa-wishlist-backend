@@ -39,3 +39,15 @@ export {
     type SavedWishlist,
     type SavedWishlistResponse,
 } from './saved.schema';
+
+// ! Params schemas
+export {
+    idParamSchema,
+    tokenParamSchema,
+    reserveParamsSchema,
+    savedParamsSchema,
+    type IdParam,
+    type TokenParam,
+    type ReserveParams,
+    type SavedParams,
+} from './params.schema';
