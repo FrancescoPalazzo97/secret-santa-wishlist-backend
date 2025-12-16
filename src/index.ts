@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import pool from './config/database';
 import { errorHandler } from './middleware/errorHandler';
+import { notFoundHandler } from './middleware/notFound';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,6 +40,7 @@ app.get('/items', async (req, res) => {
 });
 
 app.use(errorHandler);
+app.use(notFoundHandler);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
