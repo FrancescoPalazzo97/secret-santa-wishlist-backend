@@ -5,14 +5,16 @@ import { giftSchema, publicGiftSchema } from "./gift.schema";
  * * Schema base wishlist
  */
 export const wishlistBaseSchema = z.object({
-    title: z.string()
-        .min(3, 'Il titolo deve avere almeno 3 caratteri')
-        .max(100, 'Il titolo non può superare 100 caratteri')
+    title: z
+        .string()
+        .min(3, "Il titolo deve avere almeno 3 caratteri")
+        .max(100, "Il titolo non può superare 100 caratteri")
         .trim(),
 
-    owner_name: z.string()
-        .min(2, 'Il nome del proprietario deve avere almeno 2 caratteri')
-        .max(50, 'Il nome del proprietario non può superare 50 caratteri')
+    owner_name: z
+        .string()
+        .min(2, "Il nome del proprietario deve avere almeno 2 caratteri")
+        .max(50, "Il nome del proprietario non può superare 50 caratteri")
         .trim(),
 });
 
@@ -42,11 +44,15 @@ export const updateWishlistSchema = wishlistBaseSchema.partial();
  * * Schema wishlist con regali (risposta owner)
  */
 export const wishlistWithGiftsSchema = wishlistSchema.extend({
-    gifts: z.array(giftSchema.omit({
-        is_reserved: true,
-        reservation_message: true,
-        reserved_at: true,
-    })).default([]),
+    gifts: z
+        .array(
+            giftSchema.omit({
+                is_reserved: true,
+                reservation_message: true,
+                reserved_at: true,
+            }),
+        )
+        .default([]),
 });
 
 /**

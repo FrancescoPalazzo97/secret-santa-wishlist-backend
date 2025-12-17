@@ -4,16 +4,17 @@ import z from "zod";
  * * Schema per parametri ID nelle route
  */
 export const idParamSchema = z.object({
-    id: z.coerce.number()
-        .int('L\'ID deve essere un numero intero')
-        .positive('L\'ID deve essere un numero positivo'),
+    id: z.coerce
+        .number()
+        .int("L'ID deve essere un numero intero")
+        .positive("L'ID deve essere un numero positivo"),
 });
 
 /**
  * * Schema per parametro token
  */
 export const tokenParamSchema = z.object({
-    token: z.uuid('Il token deve essere un UUID valido'),
+    token: z.uuid("Il token deve essere un UUID valido"),
 });
 
 /**

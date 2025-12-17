@@ -1,12 +1,12 @@
-import pool from '../config/database';
+import pool from "../config/database";
 
-export async function start() {
+export async function start(): Promise<void> {
     try {
         const connection = await pool.getConnection();
-        console.log('✅ Successfully connected to the database.');
+        console.log("✅ Successfully connected to the database.");
         connection.release();
     } catch (err) {
-        console.error('❌ Database connection failed:', err);
+        console.error("❌ Database connection failed:", err);
         process.exit(1);
     }
 }
