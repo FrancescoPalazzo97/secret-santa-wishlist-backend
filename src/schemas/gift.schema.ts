@@ -5,35 +5,42 @@ import z from "zod";
  * ! Usato come fondamento per create/update
  */
 export const giftBaseSchema = z.object({
-    name: z.string()
-        .min(2, 'Il nome deve avere almeno 2 caratteri')
-        .max(150, 'Il nome non può superare 150 caratteri'),
+    name: z
+        .string()
+        .min(2, "Il nome deve avere almeno 2 caratteri")
+        .max(150, "Il nome non può superare 150 caratteri"),
 
-    image_url: z.string()
-        .url('Insersci un URL valido per l\'immagine del regalo')
-        .max(255, 'URL troppo lungo, massimo 255 caratteri'),
+    image_url: z
+        .url("Insersci un URL valido per l'immagine del regalo")
+        .max(255, "URL troppo lungo, massimo 255 caratteri"),
 
-    link: z.string()
-        .url('Insersci un URL valido per il link del regalo')
-        .max(255, 'URL troppo lungo, massimo 255 caratteri'),
+    link: z
+        .url("Insersci un URL valido per il link del regalo")
+        .max(255, "URL troppo lungo, massimo 255 caratteri"),
 
-    price: z.coerce.number()
-        .nonnegative('Il prezzo non può essere negativo')
-        .max(10000, 'Il prezzo non può superare 10.000')
-        .multipleOf(0.01, 'Il prezzo deve essere un valore valido con al massimo due decimali'),
+    price: z.coerce
+        .number()
+        .nonnegative("Il prezzo non può essere negativo")
+        .max(10000, "Il prezzo non può superare 10.000")
+        .multipleOf(
+            0.01,
+            "Il prezzo deve essere un valore valido con al massimo due decimali",
+        ),
 
-    priority: z.coerce.number()
-        .int('La priorità deve essere un numero intero')
-        .min(1, 'La priorità deve essere almeno 1')
-        .max(5, 'La priorità non può superare 5'),
+    priority: z.coerce
+        .number()
+        .int("La priorità deve essere un numero intero")
+        .min(1, "La priorità deve essere almeno 1")
+        .max(5, "La priorità non può superare 5"),
 
-    notes: z.string()
-        .max(500, 'Le note non possono superare 500 caratteri')
+    notes: z
+        .string()
+        .max(500, "Le note non possono superare 500 caratteri")
         .trim()
         .optional()
         .nullable()
-        .transform(val => val === '' ? null : val),
-})
+        .transform((val) => (val === "" ? null : val)),
+});
 
 /**
  * * Schema completo regalo (include campi DB)
@@ -71,7 +78,7 @@ export const publicGiftSchema = z.object({
     notes: z.string().nullable(),
     is_reserved: z.boolean(),
     reservation_message: z.string().nullable(),
-})
+});
 
 // * Types inferiti
 export type Gift = z.infer<typeof giftSchema>;
