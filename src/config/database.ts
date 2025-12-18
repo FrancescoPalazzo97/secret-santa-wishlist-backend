@@ -1,6 +1,6 @@
-import mysql from "mysql2";
+import mysql, { PoolOptions } from "mysql2";
 
-const pool = mysql.createPool({
+const opts: PoolOptions = {
     host: process.env.DB_HOST || "localhost",
     port: Number(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || "root",
@@ -13,6 +13,8 @@ const pool = mysql.createPool({
     // * Per mantenere vive le connessioni al database
     enableKeepAlive: true,
     keepAliveInitialDelay: 0,
-});
+}
+
+const pool = mysql.createPool(opts);
 
 export default pool.promise();
