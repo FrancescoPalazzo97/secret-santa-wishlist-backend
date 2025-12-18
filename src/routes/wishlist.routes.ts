@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { validate } from "../middleware/validate";
+import * as controller from "../controllers/wishlist.controller";
 import {
     createWishlistSchema,
     updateWishlistSchema,
@@ -9,18 +10,20 @@ import {
 
 const router = Router();
 
-// ! POST /api/wishlists - crea wishlist
+// * POST /api/wishlists - crea wishlist
+// ! Ancora da testare
 router.post(
     "/",
     validate(createWishlistSchema),
-    // TODO: controller.createWishlist
+    controller.create
 );
 
-// ! GET /api/wishlists/:id - Dettaglio wishlist
+// * GET /api/wishlists/:id - Dettaglio wishlist
+// ! Ancora da testare
 router.get(
     "/:id",
     validate(idParamSchema, "params"),
-    // TODO: controller.getWishlistById
+    controller.getById
 );
 
 // ! PUT /api/wishlists/:id - Modifica wishlist
