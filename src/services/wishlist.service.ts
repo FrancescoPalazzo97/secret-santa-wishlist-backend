@@ -2,6 +2,11 @@ import pool from "../config/database";
 import { CreateWishlist, UpdateWishlist, Wishlist } from "../schemas";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
+/**
+ * Retrieves a wishlist by its ID
+ * @param id - The wishlist ID
+ * @returns The wishlist object or null if not found
+ */
 export const getById = async (id: number): Promise<Wishlist | null> => {
     const query =
         `SELECT * FROM wishlists
@@ -12,17 +17,24 @@ export const getById = async (id: number): Promise<Wishlist | null> => {
     return (rows[0] as Wishlist) || null;
 };
 
+/**
+ * Creates a new wishlist
+ * @param data - The wishlist data (title and owner_name)
+ * @returns The newly created wishlist
+ */
 export const create = async (data: CreateWishlist): Promise<Wishlist> => {
     const query = `INSERT INTO wishlists (title, owner_name) VALUES (?, ?)`;
 
-    const [result] = await pool.execute<ResultSetHeader>(query, [
-        data.title,
-        data.owner_name,
-    ]);
+    const [result] = await pool.execute<ResultSetHeader>(query, Object.values(data));
 
     return getById(result.insertId) as Promise<Wishlist>;
 };
 
+/**
+ * Retrieves a wishlist by its ID along with all associated gifts
+ * @param id - The wishlist ID
+ * @returns The wishlist object with gifts array, or null if not found
+ */
 export const getByIdWithGifts = async (id: number) => {
     const wishlist = await getById(id);
 
@@ -42,6 +54,11 @@ export const getByIdWithGifts = async (id: number) => {
     };
 };
 
+/**
+ * Retrieves a published wishlist by its secret token
+ * @param token - The UUID secret token
+ * @returns The wishlist object or null if not found or not published
+ */
 export const getByToken = async (token: string) => {
     const query =
         `SELECT * FROM wishlists
@@ -52,13 +69,24 @@ export const getByToken = async (token: string) => {
     return rows[0] || null;
 };
 
-
+/**
+ * Updates a wishlist with the provided data
+ * Note: Only works for wishlists that are not published
+ * @param id - The wishlist ID
+ * @param data - Partial wishlist data to update (title and/or owner_name)
+ * @returns The updated wishlist or null if not found
+ */
 export const update = async (id: number, data: UpdateWishlist): Promise<Wishlist | null> => {
     const fields: string[] = [];
     const values: any[] = [];
 
     if (data.title !== undefined) {
         fields.push("title = ?");
+        values.push(data.title);
+    }
+
+    if (data.owner_name !== undefined) {
+        fields.push("owner_name = ?");
         values.push(data.owner_name);
     }
 
@@ -78,6 +106,11 @@ export const update = async (id: number, data: UpdateWishlist): Promise<Wishlist
     return getById(id);
 };
 
+/**
+ * Deletes a wishlist and all associated gifts (cascade delete)
+ * @param id - The wishlist ID
+ * @returns True if the wishlist was deleted, false if not found
+ */
 export const remove = async (id: number): Promise<boolean> => {
     const query =
         `DELETE FROM wishlists
@@ -88,6 +121,12 @@ export const remove = async (id: number): Promise<boolean> => {
     return result.affectedRows > 0;
 };
 
+/**
+ * Publishes a wishlist by generating a unique secret token
+ * Sets is_published to true and records the publication timestamp
+ * @param id - The wishlist ID
+ * @returns The published wishlist with the generated token
+ */
 export const publish = async (id: number): Promise<Wishlist> => {
     const token = crypto.randomUUID();
 
