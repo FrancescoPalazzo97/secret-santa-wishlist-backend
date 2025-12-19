@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../middleware/errorHandler";
 import * as wishlistService from "../services/wishlist.service";
+import * as giftService from '../services/gift.service';
 import { Certificate } from "node:crypto";
 
 export const create = async (
@@ -103,7 +104,16 @@ export const publish = async (
         }
 
         // Verifica che ci siano i regali
-        // TODO: Bisogna aggiungere i gifts services prima
+        const gifts = await giftService.getByWishlistId(Number(id));
+        if (gifts.length === 0) {
+            throw new AppError(400, "Impossibile pubblicare una wishlist vuota!");
+        }
+
+        const published = await wishlistService.publish(Number(id));
+        res.json({
+            ...published,
+            public_url: `/wishlist/${published.secret_token}`
+        });
     } catch (error) {
         console.error(error);
         next(error);
@@ -130,7 +140,8 @@ export const addGift = async (
             );
         }
 
-        // TODO: Bisogna aggiungere i gifts services prima
+        const gift = await giftService.create(Number(id), req.body);
+        res.status(201).json(gift);
     } catch (error) {
         console.error(error);
         next(error);
