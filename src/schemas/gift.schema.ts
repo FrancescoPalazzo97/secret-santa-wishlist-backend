@@ -37,7 +37,6 @@ export const giftBaseSchema = z.object({
         .string()
         .max(500, "Le note non possono superare 500 caratteri")
         .trim()
-        .optional()
         .nullable()
         .transform((val) => (val === "" ? null : val)),
 });
