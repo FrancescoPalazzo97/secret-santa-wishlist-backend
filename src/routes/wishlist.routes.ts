@@ -26,41 +26,45 @@ router.get(
     controller.getById
 );
 
-// ! PUT /api/wishlists/:id - Modifica wishlist
+// * PUT /api/wishlists/:id - Modifica wishlist
+// ! Ancora da testare
 router.put(
     "/:id",
     validate(idParamSchema, "params"),
     validate(updateWishlistSchema),
-    // TODO: controller.updateWishlist
+    controller.update
 );
 
-// ! DELETE /api/wishlists/:id - Elimina wishlist
+// * DELETE /api/wishlists/:id - Elimina wishlist
+// ! Ancora da testare
 router.delete(
     "/:id",
     validate(idParamSchema, "params"),
-    // TODO: controller.deleteWishlist
+    controller.remove
 );
 
-// ! POST /api/wishlists/:id/publish - Pubblica wishlist
+// * POST /api/wishlists/:id/publish - Pubblica wishlist
+// ! Ancora da testare
 router.post(
     "/:id/publish",
     validate(idParamSchema, "params"),
-    // TODO: controller.publishWishlist
+    controller.publish
 );
 
-// ! POST /api/wishlists/:id/gifts - Aggiungi regalo
+// * POST /api/wishlists/:id/gifts - Aggiungi regalo
+// ! Ancora da testare
 router.post(
     "/:id/gifts",
     validate(idParamSchema, "params"),
     validate(createGiftSchema),
-    // TODO: controller.addGiftToWishlist
+    controller.addGift
 );
 
-// ! GET /api/wishlists/:id/gifts - Lista regali
+// * GET /api/wishlists/:id/gifts - Lista regali
 router.get(
     "/:id/gifts",
     validate(idParamSchema, "params"),
-    // TODO: controller.getGiftsByWishlistId
+    controller.getGifts
 );
 
 export default router;
